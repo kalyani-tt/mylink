@@ -1,0 +1,47 @@
+.index {
+    font-weight: bold;
+    font-size: 160%;
+    margin-bottom: 20px
+  }
+  
+  .definition::before {
+    content: 'Definition ✍️ ';
+    font-weight: bold;
+    font-style: normal;
+    font-size: 110%
+  }
+  
+  .section::before {
+    content: 'Section ';
+    font-weight: bold;
+    font-style: normal;
+    font-size: 110%
+  }
+  
+  .remark::before {
+    content: 'Remark 🗣️ ';
+    font-weight: bold;
+    font-size: 110%
+  }
+  
+  .idea::before {
+    content: 'Idea 💡 ';
+    font-weight: bold;
+    font-size: 110%
+  }
+  
+  a.title {
+    text-decoration-style: dotted;
+    color: black
+  }
+  
+  p {
+    text-align: justify;
+    hyphens: auto;
+    margin-top: 1rem;
+  }
+  
+  body {
+    margin-left: 35%;
+    margin-right: 35%
+  }

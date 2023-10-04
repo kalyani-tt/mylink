@@ -1,0 +1,8 @@
+\title{Foo}
+\import{base-macros}
+
+\definition{Set Union}{
+    Set union is a thing.
+}
+
+\include{linear}

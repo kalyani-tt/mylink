@@ -1,0 +1,6 @@
+\def{definition}{name content}{
+    <div class="definition">
+        <a class="title" href="\cat{\title}{.html}"> \name </a>
+        <p>\content</p>
+    </div>
+}

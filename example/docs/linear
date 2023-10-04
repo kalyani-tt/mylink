@@ -1,0 +1,6 @@
+\title{Linear Types}
+\import{base-macros}
+
+\definition{Linear Types}{
+    Linear types are a thing.
+}
