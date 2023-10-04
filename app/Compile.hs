@@ -43,13 +43,21 @@ createEnv allDefs = M.fromList do
 renderDocs :: (String -> String) -> M.Map String Defs -> M.Map String Doc -> M.Map String String
 renderDocs template allDefs docs =
     let
+        allFiles = foldr (\name acc -> Cons (Text name) acc) Nil (map fst (M.toList docs))
         rends = M.mapWithKey
             (\name (Doc _ content) ->
                 let
                     env =
                         M.fromList
                             [ ("cat", Lam "x" (Lam "y" (Concat (Var "x") (Var "y"))))
-                            , ("title", Text name)] <>
+                            , ("title", Text name)
+                            , ("cons", Lam "x" (Lam "y" (Cons (Var "x") (Var "y"))))
+                            , ("nil", Nil)
+                            , ("head", Lam "xs" (Head (Var "xs")))
+                            , ("tail", Lam "xs" (Tail (Var "xs")))
+                            , ("isnil", Lam "xs" (IsNil (Var "xs")))
+                            , ("if", Lam "t" (Lam "a" (Lam "b" (If (Var "t") (Var "a") (Var "b")))))
+                            , ("allfiles", allFiles) ] <>
                         (createEnv allDefs)
                 in case runReader (eval content) (env, rends) of
                     Text s -> s)

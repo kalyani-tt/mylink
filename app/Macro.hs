@@ -17,6 +17,12 @@ data Term
     | Var String
     | Concat Term Term
     | Include Term
+    | Cons Term Term
+    | Nil
+    | Head Term
+    | Tail Term
+    | If Term Term Term
+    | IsNil Term
     deriving Show
 
 type Env = (M.Map String Term, M.Map String String)
@@ -48,6 +54,26 @@ eval (Include name) = do
         Text name -> do
             env <- asks snd
             pure (Text (fromJust . M.lookup name $ env))
+eval (Cons x y) = Cons <$> eval x <*> eval y
+eval Nil = pure Nil
+eval (Head xs) = do
+    xs <- eval xs
+    case xs of
+        Cons x _ -> pure x
+eval (Tail xs) = do
+    xs <- eval xs
+    case xs of
+        Cons _ ys -> pure ys
+eval (IsNil xs) = do
+    xs <- eval xs
+    pure case xs of
+        Nil -> Text "true"
+        _ -> Text "false"
+eval (If t a b) = do
+    t <- eval t
+    case t of
+        Text "true" -> eval a
+        _ -> eval b
 
 subst :: String -> Term -> Term -> Term
 subst x (Text s) a = Text s
@@ -64,6 +90,12 @@ subst x (Lam y f) a =
 subst x (App f e) a = App (subst x f a) (subst x e a)
 subst x (Concat y z) a = Concat (subst x y a) (subst x z a)
 subst _ (Include name) _ = Include name
+subst x (Cons a b) e = Cons (subst x a e) (subst x b e)
+subst _ Nil _ = Nil
+subst x (Head a) e = Head (subst x a e)
+subst x (Tail a) e = Tail (subst x a e)
+subst x (IsNil a) e = IsNil (subst x a e)
+subst x (If t a b) e = If (subst x t e) (subst x a e) (subst x b e)
 
 type Parser = Parsec Void String
 
